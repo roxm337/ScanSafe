@@ -1,61 +1,68 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+🔹 1. Personalization (User-Centric Features)
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+  Allergy & Health Profile
+   - Updated Preferences Table: Migrated from boolean fields to flexible JSON arrays for allergies, dietary restrictions, and lifestyle
+     preferences
+   - Enhanced User Preferences Model: Supports dynamic allergen tracking (Nuts, Gluten, Lactose, Parabens, Sulfates, etc.)
+   - Flexible Dietary Tracking: Supports Vegan, Halal, Kosher, Organic, Keto, and other dietary preferences
+   - API Endpoints: /api/preferences - GET/POST for managing user preferences
 
-## About Laravel
+  Diet & Lifestyle Preferences
+   - Personalized Risk Assessment: Algorithm that checks products against user's allergy list
+   - Preference Matching: Identifies products that align with user's dietary preferences
+   - Real-time Alerts: Warns users about ingredients they should avoid
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+  🔹 2. Smart Recommendations
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+  Alternative Product Suggestions
+   - Recommendation Engine Service: Sophisticated algorithm that suggests safe alternatives
+   - Contextual Recommendations: Takes into account user's allergies when suggesting alternatives
+   - API Endpoints:
+     - /api/recommendations - Personalized recommendations for user
+     - /api/product/{product}/alternatives - Alternative products for a specific item
+     - /api/product/{product}/recommendations - Personalized analysis for specific product
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+  Intelligent Alert System
+   - Risk Analysis: Calculates safety level based on user profile
+   - Confidence Scoring: Rates recommendations based on relevance
+   - Personalized Messaging: Tailored warnings and recommendations
 
-## Learning Laravel
+  🔹 3. Social & Community Layer
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+  Crowdsourced Reviews
+   - Product Review System: Users can add reviews, ratings, and tags
+   - Review Management: Full CRUD operations for user reviews
+   - Verification System: Marked reviews from trusted users
+   - Helpful Voting: Community-driven quality assessment
+   - API Endpoints:
+     - /api/product/{product}/reviews - List product reviews
+     - /api/product/{product}/reviews/summary - Review statistics
+     - /api/product/{product}/review - Submit new review
+     - /api/review/{review} - Manage individual review
+     - /api/review/{review}/helpful - Mark as helpful
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+  Trust Badges
+   - Verification System: Identified trusted reviewers (nutritionists, verified users)
+   - Community Moderation: Helpful voting system to surface quality reviews
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+  Social Sharing
+   - Share Content Generation: Creates personalized sharing content based on user's profile
+   - Platform Integration: Prepares content for WhatsApp, Facebook, Instagram Stories, etc.
+   - API Endpoints:
+     - /api/product/{product}/share-content - Generate shareable content
+     - /api/product/{product}/share-track - Track sharing events
 
-## Laravel Sponsors
+  Additional Backend Features:
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+   - Database Migrations: Updated all necessary tables and created new ones
+   - Model Relationships: Proper ORM relationships between all entities
+   - Factories & Seeders: Comprehensive data seeding for testing
+   - Authorization Policies: Proper user access controls
+   - API Documentation: All endpoints properly documented and secured with Sanctum authentication
+   - Service Layer: Clean architecture with separation of concerns
+   - Scalability: Designed with future expansion in mind
 
-### Premium Partners
+  The backend is now fully equipped to support all the frontend features we implemented, creating a comprehensive, personalized product safety
+  and recommendation system with strong social features.
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
 
-## Contributing
-
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
-
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
-
-## License
-
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).

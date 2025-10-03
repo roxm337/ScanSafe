@@ -22,11 +22,16 @@ class UpdatePreferencesRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'vegan' => 'nullable|boolean',
-            'diabetic' => 'nullable|boolean',
-            'gluten_free' => 'nullable|boolean',
-            'nut_allergy' => 'nullable|boolean',
-            'lactose_intolerant' => 'nullable|boolean',
+            'allergies' => 'nullable|array',
+            'allergies.*' => 'string|max:255',
+            'dietary_restrictions' => 'nullable|array',
+            'dietary_restrictions.*' => 'string|max:255',
+            'lifestyle_preferences' => 'nullable|array',
+            'lifestyle_preferences.*' => 'string|max:255',
+            'ingredient_alerts' => 'nullable|array',
+            'ingredient_alerts.*' => 'string|max:255',
+            'notifications_enabled' => 'nullable|boolean',
+            'profile_image' => 'nullable|string|max:255',
         ];
     }
 }
