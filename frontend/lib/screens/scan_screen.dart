@@ -61,13 +61,20 @@ class _ScanScreenState extends State<ScanScreen> {
             width: 120,
             height: 120,
             decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.primaryContainer,
+              gradient: const LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+                  Color(0xFF8A2BE2), // Purple
+                  Color(0xFF40E0D0), // Turquoise
+                ],
+              ),
               borderRadius: BorderRadius.circular(24),
             ),
-            child: Icon(
+            child: const Icon(
               Icons.qr_code_scanner,
               size: 60,
-              color: Theme.of(context).colorScheme.primary,
+              color: Colors.white,
             ),
           ),
           const SizedBox(height: 24),
@@ -129,17 +136,13 @@ class _ScanScreenState extends State<ScanScreen> {
         width: double.infinity,
         padding: const EdgeInsets.all(20),
         decoration: BoxDecoration(
-          color: Theme.of(context).cardTheme.color,
+          color: Colors.white,
           borderRadius: BorderRadius.circular(16),
-          border: Border.all(
-            color: Theme.of(context).dividerColor,
-            width: 1,
-          ),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha: 0.05),
-              blurRadius: 8,
-              offset: const Offset(0, 2),
+              color: Colors.grey.withOpacity(0.1),
+              blurRadius: 10,
+              offset: const Offset(0, 5),
             ),
           ],
         ),
@@ -149,12 +152,19 @@ class _ScanScreenState extends State<ScanScreen> {
               width: 50,
               height: 50,
               decoration: BoxDecoration(
-                color: Theme.of(context).colorScheme.primaryContainer,
                 borderRadius: BorderRadius.circular(12),
+                gradient: const LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [
+                    Color(0xFF8A2BE2), // Purple
+                    Color(0xFF40E0D0), // Turquoise
+                  ],
+                ),
               ),
               child: Icon(
                 icon,
-                color: Theme.of(context).colorScheme.primary,
+                color: Colors.white,
               ),
             ),
             const SizedBox(width: 16),
@@ -172,7 +182,7 @@ class _ScanScreenState extends State<ScanScreen> {
                   Text(
                     subtitle,
                     style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                          color: Theme.of(context).colorScheme.onSurfaceVariant,
+                          color: Colors.grey[600],
                         ),
                   ),
                 ],
@@ -181,7 +191,7 @@ class _ScanScreenState extends State<ScanScreen> {
             Icon(
               Icons.arrow_forward_ios,
               size: 16,
-              color: Theme.of(context).colorScheme.onSurfaceVariant,
+              color: const Color(0xFF8A2BE2),
             ),
           ],
         ),
@@ -197,51 +207,79 @@ class _ScanScreenState extends State<ScanScreen> {
           controller: scanController.scannerController,
           onDetect: scanController.onDetect,
         ),
-        // Scanner overlay with animation
-        Center(
-          child: Container(
-            width: 280,
-            height: 280,
-            decoration: BoxDecoration(
-              border: Border.all(
-                color: Theme.of(context).colorScheme.primary,
-                width: 2,
+        // Dark overlay with transparent center
+        Container(
+          decoration: BoxDecoration(
+            color: Colors.black.withOpacity(0.6),
+          ),
+          child: Center(
+            child: Container(
+              width: 280,
+              height: 280,
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20),
+                gradient: const LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [
+                    Color(0xFF8A2BE2), // Purple
+                    Color(0xFF40E0D0), // Turquoise
+                  ],
+                ),
               ),
-              borderRadius: BorderRadius.circular(16),
+              child: Container(
+                margin: const EdgeInsets.all(2),
+                decoration: BoxDecoration(
+                  color: Colors.transparent,
+                  borderRadius: BorderRadius.circular(18),
+                  border: Border.all(
+                    color: Colors.white,
+                    width: 2,
+                  ),
+                ),
+              ),
             ),
           ),
         ),
         // Animated scanning line
         Center(
           child: AnimatedContainer(
-            duration: const Duration(seconds: 1),
+            duration: const Duration(milliseconds: 1500),
             width: 276,
-            height: 4,
+            height: 2,
             margin: const EdgeInsets.only(top: 10),
             decoration: BoxDecoration(
-              color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.7),
-              borderRadius: BorderRadius.circular(2),
+              gradient: const LinearGradient(
+                begin: Alignment.topLeft,
+                end: Alignment.bottomRight,
+                colors: [
+                  Colors.transparent,
+                  Colors.white,
+                  Colors.transparent,
+                ],
+              ),
+              borderRadius: BorderRadius.circular(1),
             ),
           ),
         ),
         // Scanner instruction
         Positioned(
-          bottom: 100,
+          bottom: 120,
           left: 0,
           right: 0,
-          child: Text(
-            'Align the barcode within the frame',
-            textAlign: TextAlign.center,
-            style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                  color: Colors.white,
-                  shadows: [
-                    Shadow(
-                      offset: const Offset(0, 1),
-                      blurRadius: 3,
-                      color: Colors.black.withValues(alpha: 0.5),
-                    ),
-                  ],
-                ),
+          child: Container(
+            padding: const EdgeInsets.all(12),
+            decoration: BoxDecoration(
+              color: Colors.black.withOpacity(0.6),
+              borderRadius: BorderRadius.circular(20),
+            ),
+            child: Text(
+              'Align the barcode within the frame',
+              textAlign: TextAlign.center,
+              style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    color: Colors.white,
+                  ),
+            ),
           ),
         ),
         // Cancel button
@@ -249,14 +287,17 @@ class _ScanScreenState extends State<ScanScreen> {
           top: 60,
           left: 20,
           child: Container(
+            padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-              color: Colors.black.withValues(alpha: 0.6),
-              borderRadius: BorderRadius.circular(24),
+              color: Colors.white.withOpacity(0.2),
+              borderRadius: BorderRadius.circular(20),
+              backdropFilter: const ImageFilter.blur(sigmaX: 5, sigmaY: 5),
             ),
             child: IconButton(
               icon: Icon(
                 Icons.close,
                 color: Colors.white,
+                size: 24,
               ),
               onPressed: () {
                 setState(() {
