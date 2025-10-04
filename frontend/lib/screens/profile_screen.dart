@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../controllers/auth_controller.dart';
-import '../components/layout/custom_card.dart';
-import '../components/buttons/custom_elevated_button.dart';
+import '../theme.dart';
 
 class ProfileScreen extends StatelessWidget {
   final AuthController authController = Get.find<AuthController>();
@@ -10,14 +10,15 @@ class ProfileScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppTheme.backgroundColor,
       body: CustomScrollView(
         slivers: [
           // App bar with gradient
           SliverAppBar(
-            expandedHeight: 200,
+            expandedHeight: 220,
             floating: false,
             pinned: true,
-            backgroundColor: Theme.of(context).colorScheme.surface,
+            backgroundColor: Colors.transparent,
             flexibleSpace: FlexibleSpaceBar(
               background: Container(
                 decoration: BoxDecoration(
@@ -25,8 +26,8 @@ class ProfileScreen extends StatelessWidget {
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                     colors: [
-                      Theme.of(context).colorScheme.primary,
-                      Theme.of(context).colorScheme.primaryContainer,
+                      AppTheme.primaryColor,
+                      AppTheme.secondaryColor,
                     ],
                   ),
                 ),
@@ -40,36 +41,39 @@ class ProfileScreen extends StatelessWidget {
                         shape: BoxShape.circle,
                         border: Border.all(
                           color: Colors.white,
-                          width: 3,
+                          width: 4,
                         ),
-                        color: Colors.white,
+                        gradient: LinearGradient(
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                          colors: [
+                            AppTheme.pastelPurple,
+                            AppTheme.pastelPink,
+                          ],
+                        ),
                       ),
-                      child: Container(
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: Theme.of(context).colorScheme.primaryContainer,
-                        ),
-                        child: Icon(
-                          Icons.person,
-                          size: 50,
-                          color: Theme.of(context).colorScheme.primary,
-                        ),
+                      child: Icon(
+                        Icons.person,
+                        size: 50,
+                        color: AppTheme.primaryColor,
                       ),
                     ),
-                    const SizedBox(height: 16),
+                    SizedBox(height: 16),
                     Obx(() => Text(
-                          authController.user.value?.name ?? 'Guest User',
-                          style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                                color: Colors.white,
-                                fontWeight: FontWeight.bold,
-                              ),
+                          authController.user.value?.name ?? 'User',
+                          style: GoogleFonts.poppins(
+                            fontSize: 24,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.white,
+                          ),
                         )),
-                    const SizedBox(height: 8),
+                    SizedBox(height: 8),
                     Obx(() => Text(
-                          authController.user.value?.email ?? 'Not logged in',
-                          style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                                color: Colors.white.withValues(alpha: 0.8),
-                              ),
+                          authController.user.value?.email ?? '',
+                          style: GoogleFonts.poppins(
+                            fontSize: 16,
+                            color: Colors.white.withOpacity(0.8),
+                          ),
                         )),
                   ],
                 ),
@@ -78,107 +82,20 @@ class ProfileScreen extends StatelessWidget {
           ),
           SliverToBoxAdapter(
             child: Padding(
-              padding: const EdgeInsets.all(20),
+              padding: EdgeInsets.all(20),
               child: Column(
                 children: [
-                  // Settings and features card
-                  CustomCard(
-                    child: Column(
-                      children: [
-                        _buildProfileItem(
-                          context: context,
-                          icon: Icons.person_outline,
-                          label: 'Full Name',
-                          value: Obx(() => Text(
-                            authController.user.value?.name ?? 'N/A',
-                            style: Theme.of(context).textTheme.titleMedium,
-                          )),
-                        ),
-                        const Divider(height: 24),
-                        _buildProfileItem(
-                          context: context,
-                          icon: Icons.email_outlined,
-                          label: 'Email Address',
-                          value: Obx(() => Text(
-                            authController.user.value?.email ?? 'N/A',
-                            style: Theme.of(context).textTheme.titleMedium,
-                          )),
-                        ),
-                        const Divider(height: 24),
-                        _buildProfileItem(
-                          context: context,
-                          icon: Icons.history,
-                          label: 'Scan History',
-                          value: Text(
-                            'View your scan history',
-                            style: Theme.of(context).textTheme.titleMedium,
-                          ),
-                          onTap: () {
-                            // Navigate to scan history
-                            Get.toNamed('/scan-history');
-                          },
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                  
-                  // Additional features
-                  CustomCard(
-                    child: Column(
-                      children: [
-                        _buildFeatureItem(
-                          context: context,
-                          icon: Icons.history,
-                          title: 'Scan History',
-                          subtitle: 'View your previous scans',
-                          onTap: () {
-                            Get.toNamed('/scan-history');
-                          },
-                        ),
-                        const Divider(),
-                        _buildFeatureItem(
-                          context: context,
-                          icon: Icons.person_pin,
-                          title: 'Personal Profile',
-                          subtitle: 'Set allergies & preferences',
-                          onTap: () {
-                            Get.toNamed('/preferences');
-                          },
-                        ),
-                        const Divider(),
-                        _buildFeatureItem(
-                          context: context,
-                          icon: Icons.settings,
-                          title: 'Settings',
-                          subtitle: 'App preferences and customization',
-                          onTap: () {
-                            Get.toNamed('/settings');
-                          },
-                        ),
-                        const Divider(),
-                        _buildFeatureItem(
-                          context: context,
-                          icon: Icons.info_outline,
-                          title: 'About',
-                          subtitle: 'Learn more about the app',
-                          onTap: () {
-                            Get.toNamed('/about');
-                          },
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 20),
-                  
+                  // Settings section
+                  _buildSettingsCard(context),
+                  SizedBox(height: 16),
+                  // Preferences section
+                  _buildPreferencesCard(context),
+                  SizedBox(height: 16),
+                  // Saved products section
+                  _buildSavedProductsCard(context),
+                  SizedBox(height: 16),
                   // Logout button
-                  CustomElevatedButton(
-                    text: 'Logout',
-                    backgroundColor: Theme.of(context).colorScheme.error,
-                    onPressed: () {
-                      _showLogoutDialog(context);
-                    },
-                  ),
+                  _buildLogoutButton(context),
                 ],
               ),
             ),
@@ -188,107 +105,347 @@ class ProfileScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildProfileItem({
-    required BuildContext context,
-    required IconData icon,
-    required String label,
-    required Widget value,
-    VoidCallback? onTap,
-  }) {
-    return ListTile(
-      leading: Icon(
-        icon,
-        color: Theme.of(context).colorScheme.primary,
+  Widget _buildSettingsCard(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 10,
+            offset: Offset(0, 5),
+          ),
+        ],
       ),
-      title: Text(
-        label,
-        style: Theme.of(context).textTheme.titleMedium?.copyWith(
-              color: Theme.of(context).colorScheme.onSurfaceVariant,
-            ),
-      ),
-      subtitle: Container(
-        margin: const EdgeInsets.only(top: 4),
-        child: value,
-      ),
-      trailing: onTap != null ? Icon(
-        Icons.arrow_forward_ios,
-        size: 16,
-        color: Theme.of(context).colorScheme.onSurfaceVariant,
-      ) : null,
-      onTap: onTap,
-    );
-  }
-
-  Widget _buildFeatureItem({
-    required BuildContext context,
-    required IconData icon,
-    required String title,
-    required String subtitle,
-    required VoidCallback onTap,
-  }) {
-    return ListTile(
-      leading: Container(
-        width: 40,
-        height: 40,
-        decoration: BoxDecoration(
-          color: Theme.of(context).colorScheme.primaryContainer,
-          borderRadius: BorderRadius.circular(10),
-        ),
-        child: Icon(
-          icon,
-          color: Theme.of(context).colorScheme.primary,
-        ),
-      ),
-      title: Text(
-        title,
-        style: Theme.of(context).textTheme.titleMedium,
-      ),
-      subtitle: Text(
-        subtitle,
-        style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-              color: Theme.of(context).colorScheme.onSurfaceVariant,
-            ),
-      ),
-      trailing: Icon(
-        Icons.arrow_forward_ios,
-        size: 16,
-        color: Theme.of(context).colorScheme.onSurfaceVariant,
-      ),
-      onTap: onTap,
-    );
-  }
-
-  void _showLogoutDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text(
-          'Confirm Logout',
-          style: Theme.of(context).textTheme.titleLarge,
-        ),
-        content: Text(
-          'Are you sure you want to log out?',
-          style: Theme.of(context).textTheme.bodyMedium,
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Get.back(),
-            child: Text(
-              'Cancel',
-              style: TextStyle(
-                color: Theme.of(context).colorScheme.primary,
+      child: Column(
+        children: [
+          ListTile(
+            leading: Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                color: AppTheme.pastelPurple.withOpacity(0.1),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Icon(
+                Icons.settings,
+                color: AppTheme.primaryColor,
+                size: 20,
               ),
             ),
+            title: Text(
+              'Settings',
+              style: GoogleFonts.poppins(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+                color: AppTheme.textColor,
+              ),
+            ),
+            trailing: Icon(
+              Icons.arrow_forward_ios,
+              size: 16,
+              color: AppTheme.textSecondaryColor,
+            ),
+            onTap: () => Get.toNamed('/settings'),
           ),
-          Obx(() => CustomElevatedButton(
-                text: authController.isLoading.value ? 'Logging out...' : 'Logout',
-                backgroundColor: Theme.of(context).colorScheme.error,
-                onPressed: () {
-                  authController.logout();
-                  Get.back();
-                },
-              )),
+          Divider(height: 1, thickness: 1, color: Colors.grey[200]),
+          ListTile(
+            leading: Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                color: AppTheme.pastelBlue.withOpacity(0.1),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Icon(
+                Icons.notifications,
+                color: AppTheme.secondaryColor,
+                size: 20,
+              ),
+            ),
+            title: Text(
+              'Notifications',
+              style: GoogleFonts.poppins(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+                color: AppTheme.textColor,
+              ),
+            ),
+            trailing: Switch(
+              value: true,
+              onChanged: (value) {},
+              activeColor: AppTheme.primaryColor,
+              activeTrackColor: AppTheme.primaryColor.withOpacity(0.3),
+            ),
+          ),
+          Divider(height: 1, thickness: 1, color: Colors.grey[200]),
+          ListTile(
+            leading: Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                color: AppTheme.pastelPink.withOpacity(0.1),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Icon(
+                Icons.privacy_tip,
+                color: AppTheme.accentColor,
+                size: 20,
+              ),
+            ),
+            title: Text(
+              'Privacy Policy',
+              style: GoogleFonts.poppins(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+                color: AppTheme.textColor,
+              ),
+            ),
+            trailing: Icon(
+              Icons.arrow_forward_ios,
+              size: 16,
+              color: AppTheme.textSecondaryColor,
+            ),
+            onTap: () => Get.toNamed('/privacy'),
+          ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildPreferencesCard(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 10,
+            offset: Offset(0, 5),
+          ),
+        ],
+      ),
+      child: Column(
+        children: [
+          ListTile(
+            leading: Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                color: AppTheme.pastelTurquoise.withOpacity(0.1),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Icon(
+                Icons.favorite,
+                color: AppTheme.secondaryColor,
+                size: 20,
+              ),
+            ),
+            title: Text(
+              'Personal Preferences',
+              style: GoogleFonts.poppins(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+                color: AppTheme.textColor,
+              ),
+            ),
+            trailing: Icon(
+              Icons.arrow_forward_ios,
+              size: 16,
+              color: AppTheme.textSecondaryColor,
+            ),
+            onTap: () => Get.toNamed('/preferences'),
+          ),
+          Divider(height: 1, thickness: 1, color: Colors.grey[200]),
+          ListTile(
+            leading: Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                color: AppTheme.pastelMint.withOpacity(0.1),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Icon(
+                Icons.local_pharmacy,
+                color: Colors.green,
+                size: 20,
+              ),
+            ),
+            title: Text(
+              'Dietary Restrictions',
+              style: GoogleFonts.poppins(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+                color: AppTheme.textColor,
+              ),
+            ),
+            trailing: Icon(
+              Icons.arrow_forward_ios,
+              size: 16,
+              color: AppTheme.textSecondaryColor,
+            ),
+            onTap: () => Get.toNamed('/preferences'),
+          ),
+          Divider(height: 1, thickness: 1, color: Colors.grey[200]),
+          ListTile(
+            leading: Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                color: AppTheme.pastelLavender.withOpacity(0.1),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Icon(
+                Icons.warning,
+                color: Colors.orange,
+                size: 20,
+              ),
+            ),
+            title: Text(
+              'Allergen Alerts',
+              style: GoogleFonts.poppins(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+                color: AppTheme.textColor,
+              ),
+            ),
+            trailing: Icon(
+              Icons.arrow_forward_ios,
+              size: 16,
+              color: AppTheme.textSecondaryColor,
+            ),
+            onTap: () => Get.toNamed('/preferences'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildSavedProductsCard(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 10,
+            offset: Offset(0, 5),
+          ),
+        ],
+      ),
+      child: Column(
+        children: [
+          ListTile(
+            leading: Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                color: AppTheme.pastelPurple.withOpacity(0.1),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Icon(
+                Icons.bookmark,
+                color: AppTheme.primaryColor,
+                size: 20,
+              ),
+            ),
+            title: Text(
+              'Saved Products',
+              style: GoogleFonts.poppins(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+                color: AppTheme.textColor,
+              ),
+            ),
+            subtitle: Text(
+              'View and manage your saved products',
+              style: GoogleFonts.poppins(
+                fontSize: 12,
+                color: AppTheme.textSecondaryColor,
+              ),
+            ),
+            trailing: Icon(
+              Icons.arrow_forward_ios,
+              size: 16,
+              color: AppTheme.textSecondaryColor,
+            ),
+            onTap: () => Get.toNamed('/saved'),
+          ),
+          Divider(height: 1, thickness: 1, color: Colors.grey[200]),
+          ListTile(
+            leading: Container(
+              width: 40,
+              height: 40,
+              decoration: BoxDecoration(
+                color: AppTheme.pastelBlue.withOpacity(0.1),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Icon(
+                Icons.history,
+                color: AppTheme.secondaryColor,
+                size: 20,
+              ),
+            ),
+            title: Text(
+              'Scan History',
+              style: GoogleFonts.poppins(
+                fontSize: 16,
+                fontWeight: FontWeight.w600,
+                color: AppTheme.textColor,
+              ),
+            ),
+            subtitle: Text(
+              'View your recent scans',
+              style: GoogleFonts.poppins(
+                fontSize: 12,
+                color: AppTheme.textSecondaryColor,
+              ),
+            ),
+            trailing: Icon(
+              Icons.arrow_forward_ios,
+              size: 16,
+              color: AppTheme.textSecondaryColor,
+            ),
+            onTap: () => Get.toNamed('/history'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildLogoutButton(BuildContext context) {
+    return Container(
+      width: double.infinity,
+      height: 56,
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            AppTheme.primaryColor,
+            AppTheme.secondaryColor,
+          ],
+        ),
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: TextButton(
+        onPressed: () {
+          authController.logout();
+        },
+        child: Text(
+          'Logout',
+          style: GoogleFonts.poppins(
+            fontSize: 16,
+            fontWeight: FontWeight.w600,
+            color: Colors.white,
+          ),
+        ),
       ),
     );
   }
