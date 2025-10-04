@@ -1,0 +1,143 @@
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
+import '../controllers/auth_controller.dart';
+import '../components/inputs/custom_text_field.dart';
+import '../components/buttons/custom_elevated_button.dart';
+import '../components/layout/custom_card.dart';
+import '../utils/validation.dart';
+import '../theme.dart';
+
+class LoginScreen extends StatelessWidget {
+  final AuthController authController = Get.find<AuthController>();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              AppTheme.pastelPurple,
+              AppTheme.pastelPink,
+            ],
+          ),
+        ),
+        child: SafeArea(
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(24),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const SizedBox(height: 20),
+                IconButton(
+                  onPressed: () => Get.back(),
+                  icon: Icon(
+                    Icons.arrow_back,
+                    color: Colors.white,
+                  ),
+                ),
+                const SizedBox(height: 32),
+                Text(
+                  'Welcome\nBack',
+                  style: GoogleFonts.poppins(
+                    fontSize: 32,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.white,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  'Sign in to continue to your account',
+                  style: GoogleFonts.poppins(
+                    fontSize: 16,
+                    color: Colors.white.withOpacity(0.9),
+                  ),
+                ),
+                const SizedBox(height: 40),
+                Container(
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(24),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.1),
+                        blurRadius: 20,
+                        offset: Offset(0, 10),
+                      ),
+                    ],
+                  ),
+                  padding: EdgeInsets.all(32),
+                child: Column(
+                  children: [
+                    CustomTextField(
+                      label: 'Email',
+                      hint: 'Enter your email',
+                      controller: emailController,
+                      keyboardType: TextInputType.emailAddress,
+                      prefixIcon: Icon(
+                        Icons.email_outlined,
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                      ),
+                      validator: ValidationUtils.validateEmail,
+                    ),
+                    const SizedBox(height: 16),
+                    CustomTextField(
+                      label: 'Password',
+                      hint: 'Enter your password',
+                      controller: passwordController,
+                      obscureText: true,
+                      prefixIcon: Icon(
+                        Icons.lock_outline,
+                        color: Theme.of(context).colorScheme.onSurfaceVariant,
+                      ),
+                      validator: ValidationUtils.validatePassword,
+                    ),
+                    const SizedBox(height: 32),
+                    Obx(() => CustomElevatedButton(
+                          text: 'Sign In',
+                          isLoading: authController.isLoading.value,
+                          onPressed: () {
+                            authController.login(
+                              emailController.text,
+                              passwordController.text,
+                            );
+                          },
+                        )),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 24),
+              Center(
+                child: TextButton(
+                  onPressed: () {
+                    Get.toNamed('/register');
+                  },
+                  child: RichText(
+                    text: TextSpan(
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                            color: Theme.of(context).colorScheme.primary,
+                          ),
+                      children: const [
+                        TextSpan(text: 'Don\'t have an account? '),
+                        TextSpan(
+                          text: 'Sign Up',
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    ));
+  }
+}
