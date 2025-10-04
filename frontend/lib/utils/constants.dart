@@ -1,6 +1,6 @@
 class AppConstants {
   // API endpoints
-  static const String baseUrl = 'http://192.168.1.8:8000/api';
+  static const String baseUrl = 'http://192.168.100.197:8000/api';
   
   // Storage keys
   static const String tokenKey = 'token';
