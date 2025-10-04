@@ -1,9 +1,13 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
 import '../controllers/scan_controller.dart';
 import '../components/inputs/custom_text_field.dart';
 import '../components/buttons/custom_elevated_button.dart';
+import '../theme.dart';
 
 
 class ScanScreen extends StatefulWidget {
@@ -32,12 +36,26 @@ class _ScanScreenState extends State<ScanScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: AppTheme.backgroundColor,
       appBar: AppBar(
         title: Text(
           'Scan Product',
-          style: Theme.of(context).textTheme.titleLarge,
+          style: GoogleFonts.poppins(
+            fontSize: 20,
+            fontWeight: FontWeight.w600,
+            color: AppTheme.textColor,
+          ),
         ),
         centerTitle: true,
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        leading: IconButton(
+          icon: Icon(
+            Icons.arrow_back,
+            color: AppTheme.textColor,
+          ),
+          onPressed: () => Get.back(),
+        ),
       ),
       body: AnimatedSwitcher(
         duration: const Duration(milliseconds: 300),
@@ -286,24 +304,26 @@ class _ScanScreenState extends State<ScanScreen> {
         Positioned(
           top: 60,
           left: 20,
-          child: Container(
-            padding: const EdgeInsets.all(8),
-            decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.2),
-              borderRadius: BorderRadius.circular(20),
-              backdropFilter: const ImageFilter.blur(sigmaX: 5, sigmaY: 5),
-            ),
-            child: IconButton(
-              icon: Icon(
-                Icons.close,
-                color: Colors.white,
-                size: 24,
+          child: BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 5, sigmaY: 5),
+            child: Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: Colors.white.withOpacity(0.2),
+                borderRadius: BorderRadius.circular(20),
               ),
-              onPressed: () {
-                setState(() {
-                  _showCameraScanner = false;
-                });
-              },
+              child: IconButton(
+                icon: Icon(
+                  Icons.close,
+                  color: Colors.white,
+                  size: 24,
+                ),
+                onPressed: () {
+                  setState(() {
+                    _showCameraScanner = false;
+                  });
+                },
+              ),
             ),
           ),
         ),
@@ -322,7 +342,7 @@ class _ScanScreenState extends State<ScanScreen> {
               IconButton(
                 icon: Icon(
                   Icons.arrow_back,
-                  color: Theme.of(context).colorScheme.onSurface,
+                  color: AppTheme.textColor,
                 ),
                 onPressed: () {
                   setState(() {
@@ -333,7 +353,11 @@ class _ScanScreenState extends State<ScanScreen> {
               const SizedBox(width: 8),
               Text(
                 'Manual Entry',
-                style: Theme.of(context).textTheme.titleLarge,
+                style: GoogleFonts.poppins(
+                  fontSize: 20,
+                  fontWeight: FontWeight.w600,
+                  color: AppTheme.textColor,
+                ),
               ),
             ],
           ),

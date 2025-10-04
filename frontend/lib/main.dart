@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:frontend/controllers/preferences_controller.dart';
+import 'package:frontend/screens/scan_screen.dart';
 import 'package:frontend/services/preferences_api_service.dart';
 import 'package:frontend/services/recommendations_api_service.dart';
 import 'package:frontend/services/reviews_api_service.dart';
@@ -58,6 +59,7 @@ class MyApp extends StatelessWidget {
         GetPage(name: '/scan-history', page: () => ScanHistoryScreen()),
         GetPage(name: '/about', page: () => AboutScreen()),
         GetPage(name: '/preferences', page: () => PreferencesScreen()),
+        GetPage(name: '/scan', page: () => ScanScreen()),
       ],
     );
   }

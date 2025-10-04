@@ -3,6 +3,8 @@ import 'package:get/get.dart';
 import '../components/layout/custom_card.dart';
 
 class ScanHistoryScreen extends StatelessWidget {
+  const ScanHistoryScreen({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     // Mock scan history data

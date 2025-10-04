@@ -1,13 +1,23 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class AppTheme {
-  static const Color primaryColor = Color(0xFF2E7D32); // Green 700
-  static const Color secondaryColor = Color(0xFF1976D2); // Blue 700
-  static const Color accentColor = Color(0xFFFFC107); // Amber 500
+  // Pastel gradient colors
+  static const Color pastelPurple = Color(0xFFD1C4E9);
+  static const Color pastelPink = Color(0xFFF8BBD0);
+  static const Color pastelBlue = Color(0xFFB3E5FC);
+  static const Color pastelTurquoise = Color(0xFFB2DFDB);
+  static const Color pastelLavender = Color(0xFFE1BEE7);
+  static const Color pastelMint = Color(0xFFC8E6C9);
+  
+  // Primary colors
+  static const Color primaryColor = Color(0xFF8A2BE2); // Purple
+  static const Color secondaryColor = Color(0xFF40E0D0); // Turquoise
+  static const Color accentColor = Color(0xFFFF69B4); // Pink
   static const Color successColor = Color(0xFF4CAF50);
   static const Color warningColor = Color(0xFFFF9800);
   static const Color errorColor = Color(0xFFF44336);
-  static const Color backgroundColor = Color(0xFFF5F5F5);
+  static const Color backgroundColor = Color(0xFFF9F9F9);
   static const Color surfaceColor = Color(0xFFFFFFFF);
   static const Color textColor = Color(0xFF212121);
   static const Color textSecondaryColor = Color(0xFF757575);
@@ -15,6 +25,7 @@ class AppTheme {
   static ThemeData get lightTheme {
     return ThemeData(
       useMaterial3: true,
+      fontFamily: GoogleFonts.poppins().fontFamily,
       colorScheme: ColorScheme.fromSeed(
         seedColor: primaryColor,
         primary: primaryColor,
@@ -25,18 +36,18 @@ class AppTheme {
         onSecondary: Colors.white,
         onSurface: textColor,
         onSurfaceVariant: textSecondaryColor,
-        outline: const Color(0xFFCCCCCC),
+        outline: const Color(0xFFE0E0E0),
       ),
       scaffoldBackgroundColor: backgroundColor,
       appBarTheme: const AppBarTheme(
-        backgroundColor: primaryColor,
-        foregroundColor: Colors.white,
+        backgroundColor: Colors.transparent,
+        foregroundColor: textColor,
         elevation: 0,
         centerTitle: true,
         titleTextStyle: TextStyle(
           fontSize: 20,
-          fontWeight: FontWeight.bold,
-          color: Colors.white,
+          fontWeight: FontWeight.w600,
+          color: textColor,
         ),
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
