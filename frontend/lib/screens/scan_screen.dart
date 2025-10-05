@@ -337,31 +337,7 @@ class _ScanScreenState extends State<ScanScreen> {
       child: Column(
         children: [
           // Header
-          Row(
-            children: [
-              IconButton(
-                icon: Icon(
-                  Icons.arrow_back,
-                  color: AppTheme.textColor,
-                ),
-                onPressed: () {
-                  setState(() {
-                    _showManualEntry = false;
-                  });
-                },
-              ),
-              const SizedBox(width: 8),
-              Text(
-                'Manual Entry',
-                style: GoogleFonts.poppins(
-                  fontSize: 20,
-                  fontWeight: FontWeight.w600,
-                  color: AppTheme.textColor,
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 24),
+         
           // Manual entry field
           Expanded(
             child: Column(
