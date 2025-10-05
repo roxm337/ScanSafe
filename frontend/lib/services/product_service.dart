@@ -10,4 +10,8 @@ class ProductService {
     final data = {'ean': ean};
     return await _apiProvider.post('/scan', data);
   }
+
+  Future<Response> getProductByEan(String ean) async {
+    return await _apiProvider.get('/product/$ean');
+  }
 }

@@ -1,52 +1,32 @@
-import 'package:get/get.dart';
-import '../models/product_review.dart';
-import '../services/reviews_api_service.dart';
+import 'package:dio/dio.dart';
+import '../providers/api_provider.dart';
 
-class ReviewsService extends GetxService {
-  Future<List<ProductReview>> getProductReviews(String productId) async {
-    try {
-      final apiService = Get.find<ReviewsApiService>();
-      return await apiService.getProductReviews(productId);
-    } catch (e) {
-      print('Error getting reviews from API: $e');
-      // Return empty list on error
-      return [];
-    }
+class ReviewsService {
+  final ApiProvider _apiProvider;
+
+  ReviewsService(this._apiProvider);
+
+  Future<Response> getProductReviews(String productId) async {
+    return await _apiProvider.get('/product/$productId/reviews');
   }
 
-  Future<ReviewSummary> getProductReviewSummary(String productId) async {
-    try {
-      final apiService = Get.find<ReviewsApiService>();
-      return await apiService.getProductReviewSummary(productId);
-    } catch (e) {
-      print('Error getting review summary from API: $e');
-      // Return empty summary on error
-      return ReviewSummary(
-        averageRating: 0.0,
-        totalReviews: 0,
-        tagCounts: {},
-        commonIssues: [],
-      );
-    }
+  Future<Response> getProductReviewsSummary(String productId) async {
+    return await _apiProvider.get('/product/$productId/reviews/summary');
   }
 
-  Future<bool> submitReview(ProductReview review) async {
-    try {
-      final apiService = Get.find<ReviewsApiService>();
-      return await apiService.submitReview(review);
-    } catch (e) {
-      print('Error submitting review to API: $e');
-      return false;
-    }
+  Future<Response> addProductReview(String productId, Map<String, dynamic> reviewData) async {
+    return await _apiProvider.post('/product/$productId/review', reviewData);
   }
 
-  Future<bool> voteHelpful(String reviewId) async {
-    try {
-      final apiService = Get.find<ReviewsApiService>();
-      return await apiService.voteHelpful(reviewId);
-    } catch (e) {
-      print('Error voting helpful to API: $e');
-      return false;
-    }
+  Future<Response> updateReview(String reviewId, Map<String, dynamic> reviewData) async {
+    return await _apiProvider.post('/review/$reviewId', reviewData);
+  }
+
+  Future<Response> deleteReview(String reviewId) async {
+    return await _apiProvider.post('/review/$reviewId', {});
+  }
+
+  Future<Response> markReviewHelpful(String reviewId) async {
+    return await _apiProvider.post('/review/$reviewId/helpful', {});
   }
 }
