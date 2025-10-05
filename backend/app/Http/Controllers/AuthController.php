@@ -21,11 +21,11 @@ class AuthController extends Controller
 
         // Create empty preferences
         $user->preference()->create([
-            'vegan' => false,
-            'diabetic' => false,
-            'gluten_free' => false,
-            'nut_allergy' => false,
-            'lactose_intolerant' => false,
+            'allergies' => [],
+            'dietary_restrictions' => [],
+            'lifestyle_preferences' => [],
+            'ingredient_alerts' => [],
+            'notifications_enabled' => true,
         ]);
 
         $token = $user->createToken('auth_token')->plainTextToken;

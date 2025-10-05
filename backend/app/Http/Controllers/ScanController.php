@@ -53,24 +53,21 @@ class ScanController extends Controller
         $compliant = true;
         $ingredients = strtolower($product->ingredients_text ?? '');
 
-        if ($preferences->vegan && (str_contains($ingredients, 'gelatin') || str_contains($ingredients, 'rennet') || str_contains($ingredients, 'whey'))) {
+        if (in_array('vegan', $preferences->dietary_restrictions) && (str_contains($ingredients, 'gelatin') || str_contains($ingredients, 'rennet') || str_contains($ingredients, 'whey'))) {
             $issues[] = ['flag' => 'vegan', 'ingredient' => 'animal-derived'];
             $compliant = false;
         }
 
-        if ($preferences->gluten_free && (str_contains($ingredients, 'wheat') || str_contains($ingredients, 'barley') || str_contains($ingredients, 'rye'))) {
+        if (in_array('gluten_free', $preferences->dietary_restrictions) && (str_contains($ingredients, 'wheat') || str_contains($ingredients, 'barley') || str_contains($ingredients, 'rye'))) {
             $issues[] = ['flag' => 'gluten_free', 'ingredient' => 'gluten'];
             $compliant = false;
         }
 
-        if ($preferences->nut_allergy && (str_contains($ingredients, 'peanut') || str_contains($ingredients, 'almond'))) {
-            $issues[] = ['flag' => 'nut_allergy', 'ingredient' => 'nuts'];
-            $compliant = false;
-        }
-
-        if ($preferences->lactose_intolerant && (str_contains($ingredients, 'milk') || str_contains($ingredients, 'lactose'))) {
-            $issues[] = ['flag' => 'lactose_intolerant', 'ingredient' => 'dairy'];
-            $compliant = false;
+        foreach ($preferences->allergies as $allergy) {
+            if (str_contains($ingredients, strtolower($allergy))) {
+                $issues[] = ['flag' => 'allergy', 'ingredient' => $allergy];
+                $compliant = false;
+            }
         }
 
         return [

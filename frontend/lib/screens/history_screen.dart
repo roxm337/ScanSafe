@@ -1,45 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import '../controllers/scan_history_controller.dart';
+
 
 class HistoryScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    // Mock scan history data
-    final scanHistory = [
-      {
-        'id': '1',
-        'productName': 'Organic Apple Juice',
-        'brand': 'Nature\'s Best',
-        'date': 'Today, 14:32',
-        'status': 'Safe',
-        'imageUrl': 'https://via.placeholder.com/60x60',
-      },
-      {
-        'id': '2',
-        'productName': 'Gluten-Free Bread',
-        'brand': 'Healthy Bakes',
-        'date': 'Yesterday, 09:15',
-        'status': 'Contains allergen',
-        'imageUrl': 'https://via.placeholder.com/60x60',
-      },
-      {
-        'id': '3',
-        'productName': 'Protein Bar',
-        'brand': 'Fit Snacks',
-        'date': 'Oct 1, 18:45',
-        'status': 'Safe',
-        'imageUrl': 'https://via.placeholder.com/60x60',
-      },
-      {
-        'id': '4',
-        'productName': 'Baby Shampoo',
-        'brand': 'Gentle Care',
-        'date': 'Sep 30, 16:20',
-        'status': 'Not recommended',
-        'imageUrl': 'https://via.placeholder.com/60x60',
-      },
-    ];
+    final scanHistoryController = Get.find<ScanHistoryController>();
 
     return Scaffold(
       appBar: AppBar(
@@ -53,18 +21,26 @@ class HistoryScreen extends StatelessWidget {
         elevation: 0,
         backgroundColor: Colors.transparent,
       ),
-      body: scanHistory.isEmpty
-          ? _buildEmptyState(context)
-          : Padding(
-              padding: const EdgeInsets.all(16),
-              child: ListView.builder(
-                itemCount: scanHistory.length,
-                itemBuilder: (context, index) {
-                  final scan = scanHistory[index];
-                  return _buildHistoryItem(context, scan);
-                },
-              ),
-            ),
+      body: Obx(() {
+        if (scanHistoryController.isLoading.value) {
+          return const Center(child: CircularProgressIndicator());
+        }
+        
+        if (scanHistoryController.scans.isEmpty) {
+          return _buildEmptyState(context);
+        }
+        
+        return Padding(
+          padding: const EdgeInsets.all(16),
+          child: ListView.builder(
+            itemCount: scanHistoryController.scans.length,
+            itemBuilder: (context, index) {
+              final scan = scanHistoryController.scans[index];
+              return _buildHistoryItem(context, scan);
+            },
+          ),
+        );
+      }),
     );
   }
 
@@ -132,14 +108,26 @@ class HistoryScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildHistoryItem(BuildContext context, Map<String, dynamic> scan) {
-    bool isSafe = scan['status'] == 'Safe';
-    Color statusColor = isSafe 
+  Widget _buildHistoryItem(BuildContext context, scan) {
+    // Determine status based on compliance
+    bool compliant = scan.product.compliance.compliant;
+    List<Map<String, String>> issues = scan.product.compliance.issues;
+    String status = compliant && issues.isEmpty ? 'Safe' : 'Not recommended';
+    
+    Color statusColor = status == 'Safe' 
         ? const Color(0xFF4CAF50) // Green
-        : scan['status'] == 'Contains allergen'
+        : status == 'Contains allergen'
             ? const Color(0xFFF44336) // Red
             : const Color(0xFFFF9800); // Orange
-    
+
+    // Format the scanned_at date
+    String formattedDate = scan.scannedAt.isNotEmpty 
+        ? DateTime.parse(scan.scannedAt).toString().split(' ')[0] 
+        : 'Unknown date';
+    String formattedTime = scan.scannedAt.isNotEmpty 
+        ? DateTime.parse(scan.scannedAt).toString().split(' ')[1].substring(0, 5) 
+        : 'Unknown time';
+
     return Padding(
       padding: const EdgeInsets.only(bottom: 12),
       child: Container(
@@ -160,14 +148,33 @@ class HistoryScreen extends StatelessWidget {
             Container(
               width: 50,
               height: 50,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(12),
-                color: Colors.grey[200],
-              ),
-              child: Icon(
-                Icons.image,
-                color: Colors.grey[500],
-              ),
+              decoration: scan.product.imageUrl != null && scan.product.imageUrl!.isNotEmpty
+                  ? BoxDecoration(
+                      borderRadius: BorderRadius.circular(12),
+                      color: Colors.grey[200],
+                    )
+                  : BoxDecoration(
+                      borderRadius: BorderRadius.circular(12),
+                      color: Colors.grey[200],
+                    ),
+              child: scan.product.imageUrl != null && scan.product.imageUrl!.isNotEmpty
+                  ? ClipRRect(
+                      borderRadius: BorderRadius.circular(12),
+                      child: Image.network(
+                        scan.product.imageUrl!,
+                        fit: BoxFit.cover,
+                        errorBuilder: (context, error, stackTrace) {
+                          return Icon(
+                            Icons.image,
+                            color: Colors.grey[500],
+                          );
+                        },
+                      ),
+                    )
+                  : Icon(
+                      Icons.image,
+                      color: Colors.grey[500],
+                    ),
             ),
             const SizedBox(width: 12),
             Expanded(
@@ -175,14 +182,14 @@ class HistoryScreen extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    scan['productName'],
+                    scan.product.name,
                     style: GoogleFonts.poppins(
                       fontSize: 16,
                       fontWeight: FontWeight.w600,
                     ),
                   ),
                   Text(
-                    scan['brand'],
+                    scan.product.brand,
                     style: GoogleFonts.poppins(
                       fontSize: 14,
                       color: Colors.grey[600],
@@ -190,7 +197,7 @@ class HistoryScreen extends StatelessWidget {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    scan['date'],
+                    '$formattedDate at $formattedTime',
                     style: GoogleFonts.poppins(
                       fontSize: 12,
                       color: Colors.grey[500],
@@ -206,7 +213,7 @@ class HistoryScreen extends StatelessWidget {
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Text(
-                scan['status'],
+                status,
                 style: GoogleFonts.poppins(
                   fontSize: 12,
                   color: statusColor,

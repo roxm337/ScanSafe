@@ -23,6 +23,7 @@ class AuthController extends GetxController {
   Future<void> checkLoginStatus() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     String? token = prefs.getString(AppConstants.tokenKey);
+    print(token);
     if (token != null) {
       apiProvider.setToken(token);
       // Optionally fetch user data
