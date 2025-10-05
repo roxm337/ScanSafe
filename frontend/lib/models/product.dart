@@ -27,7 +27,7 @@ class Product {
 
   factory Product.fromJson(Map<String, dynamic> json, {Map<String, dynamic>? complianceData}) {
     return Product(
-      id: json['id'] ?? json['ean'] ?? '', // Use 'id' field from API, fallback to ean
+      id: (json['id'] ?? json['ean'] ?? '').toString(), // Convert to string to handle both int and string
       ean: json['ean'] ?? json['id'] ?? '', // Fallback logic
       name: json['name'] ?? 'Unknown',
       brand: json['brand'] ?? 'Unknown',
